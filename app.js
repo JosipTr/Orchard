@@ -9,6 +9,7 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 
 app.use(router.homeRouter);
+app.use(router.authRouter);
 
 app.use(errorController.get404);
 app.use(errorController.get500);
