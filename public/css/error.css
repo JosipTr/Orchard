@@ -1,0 +1,27 @@
+section.error-content {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: transparent;
+  border-radius: 8px;
+  box-shadow: 20px 20px 20px rgba(0, 0, 0, 0.1);
+}
+
+.error-content h1 {
+  color: #dc3545;
+  text-align: center;
+}
+
+p {
+  text-align: justify;
+
+  margin-bottom: 12px;
+}
+
+a {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
