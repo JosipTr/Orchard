@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 
 const router = require("./routes/index");
 const errorController = require("./controllers/error");
+const middleware = require("./middleware/index");
 
 const app = express();
 
@@ -11,6 +12,8 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use(middleware.authMiddleware);
 
 app.use(router.homeRouter);
 app.use(router.authRouter);

@@ -36,3 +36,8 @@ exports.postRegister = async (req, res, next) => {
     next(new Error(err));
   }
 };
+
+exports.getLogout = (req, res, next) => {
+  res.clearCookie("jwt");
+  res.redirect("/");
+}

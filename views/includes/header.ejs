@@ -9,10 +9,13 @@
       </ul>
 
       <ul>
-        <!-- <a href="/blog/add-post">New post</a> -->
-        <!-- <a href="/logout">Logout</a> -->
+        <% if (isAuthenticated) { %>
+        <a href="/logout">Logout</a>
+        <% } else {%>
+
         <a href="/login">Login</a>
         <a href="/register">Register</a>
+        <% } %>
       </ul>
     </nav>
   </header>
