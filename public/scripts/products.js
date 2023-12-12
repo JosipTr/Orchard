@@ -1,5 +1,8 @@
+const loader = `<div class="loader"></div>`;
+
 getProducts = async () => {
   const productsContainer = document.querySelector(".products-container");
+  productsContainer.innerHTML = loader;
   const response = await fetch("http://localhost:8080/products", {
     method: "GET",
     headers: {
@@ -10,23 +13,17 @@ getProducts = async () => {
   if (response.status !== 200) {
     return location.assign("/");
   }
+  let result = '';
   const products = await response.json();
-  
   products.forEach((product) => {
-    const section = document.createElement("section");
-    section.classList.add("product-item");
-    const image = document.createElement("img");
-    image.src = product.imageUrl;
-    image.alt = product.name;
-    const title = document.createElement("h1");
-    title.textContent = product.name;
-    const button = document.createElement("button");
-    button.textContent = "Add to cart";
-    button.classList.add("button-46");
-    button.id = "addToCartBtn";
-
-    section.append(image, title, button);
-    productsContainer.appendChild(section);
+    result += `
+    <section class="product-item">
+    <img src="${product.imageUrl}" alt="${product.name}">
+    <h1>${product.name}</h1>
+    <button id="addToCartButton" class="button-46">Add to cart</button>
+    </section>
+    `;
+    productsContainer.innerHTML = result;
   });
 };
 
