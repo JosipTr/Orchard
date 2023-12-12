@@ -4,7 +4,9 @@
 <%- include('../includes/header.ejs') %>
 <section class="login-container">
   <h1>Register an Account</h1>
-
+  <% if (errorMsg) {%>
+  <p><%= errorMsg %></p>
+  <% } %>
   <form action="/register" method="POST">
 
     <label for="email">Email:</label>

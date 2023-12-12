@@ -1,9 +1,17 @@
 exports.getLogin = (req, res, next) => {
-  res.render("auth/login", { title: "Login" });
+  const errorMsg = req.flash("error");
+  if (!errorMsg) {
+    errorMsg = null;
+  }
+  res.render("auth/login", { title: "Login", errorMsg: errorMsg });
 };
 
 exports.getRegister = (req, res, next) => {
-  res.render("auth/register", { title: "Register" });
+  const errorMsg = req.flash("error");
+  if (!errorMsg) {
+    errorMsg = null;
+  }
+  res.render("auth/register", { title: "Register", errorMsg: errorMsg });
 };
 
 exports.postLogin = async (req, res, next) => {
@@ -23,16 +31,19 @@ exports.postLogin = async (req, res, next) => {
       body: JSON.stringify(data),
     });
 
+    const jsonData = await response.json();
+
     if (response.status === 200) {
-      const jsonData = await response.json();
       res.cookie("jwt", jsonData.token);
       return res.redirect("/");
     }
-    res.redirect("/");
+    
+    req.flash("error", jsonData.message);
+    return res.redirect("/login");
   } catch (err) {
     next(new Error(err));
   }
-}
+};
 
 exports.postRegister = async (req, res, next) => {
   const email = req.body.email;
@@ -52,13 +63,13 @@ exports.postRegister = async (req, res, next) => {
       },
       body: JSON.stringify(data),
     });
-
+    const jsonData = await response.json();
     if (response.status === 200) {
-      const jsonData = await response.json();
       res.cookie("jwt", jsonData.token);
       return res.redirect("/");
     }
-    res.redirect("/");
+    req.flash("error", jsonData.message);
+    return res.redirect("/register");
   } catch (err) {
     next(new Error(err));
   }
@@ -67,4 +78,4 @@ exports.postRegister = async (req, res, next) => {
 exports.getLogout = (req, res, next) => {
   res.clearCookie("jwt");
   res.redirect("/");
-}
+};
