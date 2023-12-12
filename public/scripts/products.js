@@ -16,7 +16,7 @@ getProducts = async () => {
     const section = document.createElement("section");
     section.classList.add("product-item");
     const image = document.createElement("img");
-    image.src = product.src;
+    image.src = product.imageUrl;
     image.alt = product.name;
     const title = document.createElement("h1");
     title.textContent = product.name;
