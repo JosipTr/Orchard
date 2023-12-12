@@ -1,0 +1,19 @@
+<%- include('../includes/head.ejs') %>
+<link rel="stylesheet" href="/css/auth.css">
+</head>
+<%- include('../includes/header.ejs') %>
+<section class="login-container">
+  <h1>Add new product</h1>
+
+  <form action="/add-product" method="POST">
+
+    <label for="name">Product name:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="imageUrl">Image URL:</label>
+    <input type="url" id="imageUrl" name="imageUrl" required>
+
+    <button class="button-46" type="submit">Add product</button>
+  </form>
+</section>
+<%- include('../includes/footer.ejs') %>
