@@ -15,29 +15,22 @@ exports.getRegister = (req, res, next) => {
 };
 
 exports.postLogin = async (req, res, next) => {
-  const email = req.body.email;
-  const password = req.body.password;
-
-  const data = {
-    email: email,
-    password: password,
-  };
   try {
-    const response = await fetch("http://localhost:8080/login", {
-      method: "post",
+    const response = await fetch("http://localhost:8080/user", {
+      method: "get",
       headers: {
+        Authorization: req.token,
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
     });
 
     const jsonData = await response.json();
 
     if (response.status === 200) {
-      res.cookie("jwt", jsonData.token);
+      res.cookie("email", jsonData.email);
       return res.redirect("/");
     }
-    
+
     req.flash("error", jsonData.message);
     return res.redirect("/login");
   } catch (err) {
@@ -77,5 +70,13 @@ exports.postRegister = async (req, res, next) => {
 
 exports.getLogout = (req, res, next) => {
   res.clearCookie("jwt");
-  res.redirect("/");
+  res.clearCookie("email");
+  req.session.destroy((err) => {
+    if (err) {
+      console.log("Error logout:");
+      console.log(err);
+    }
+    return res.redirect("/");
+  });
+  return res.redirect("/");
 };
