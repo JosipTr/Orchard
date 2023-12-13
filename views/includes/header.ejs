@@ -9,6 +9,9 @@
       </ul>
 
       <ul>
+        <% if (email) {%>
+        <a href="/#">Hello <%= email %></a>
+        <% } %>
         <% if (isAuthenticated) { %>
         <a href="/logout">Logout</a>
         <% } else {%>
