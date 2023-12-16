@@ -2,20 +2,20 @@ const express = require("express");
 
 const controller = require("../controllers/products");
 
-const middleware = require("../middleware/index");
+const middleware = require("../middleware/auth");
 
 const router = express.Router();
 
 router.get("/products", controller.getProducts);
 router.get(
   "/add-product",
-  middleware.isAuthMiddleware,
+  middleware.checkAuthorization,
   controller.getAddProduct
 );
 
 router.post(
   "/add-product",
-  middleware.isAuthMiddleware,
+  middleware.checkAuthorization,
   controller.postAddProduct
 );
 

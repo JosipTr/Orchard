@@ -1,8 +1,9 @@
 const loader = document.createElement("div");
 loader.classList.add("loader");
 
+const cartElement = document.querySelector("#notLoggedIn");
+
 getProducts = async () => {
-  const cart = document.querySelector("#notLoggedIn");
   const productsContainer = document.querySelector(".products-container");
   productsContainer.appendChild(loader);
   const response = await fetch("http://localhost:8080/products", {
@@ -37,26 +38,36 @@ getProducts = async () => {
 
     productsContainer.appendChild(section);
 
-    addToCart(button, product, cart);
+    addToCart(button, product, cartElement);
   });
   productsContainer.removeChild(loader);
 };
 
 getProducts();
 
-addToCart = (button, product, cart) => {
+addToCart = (button, product, cartElement) => {
   button.addEventListener("click", async (event) => {
-    if (!cart) {
-      const response = await fetch("http://localhost:8080/cart-add",
-      {
+    if (!cartElement) {
+      const data = {
+        id: product._id,
+        quantity: 1,
+      };
+      const response = await fetch("http://localhost:8080/cart-add", {
         method: "post",
         headers: {
-          Authorization : document.cookie.slice(4,180),
+          Authorization: document.cookie.slice(4, 180),
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(product),
+        body: JSON.stringify(data),
+      });
+      const jsonData = await response.json();
+      if (response.status === 201) {
+        console.log(jsonData.message);
+        setCookie("cart", JSON.stringify(jsonData.cart), 1);
+        displayCart();
+      } else {
+        console.log("Something went wrong!");
       }
-      );
       return;
     }
 
@@ -94,9 +105,42 @@ addToCart = (button, product, cart) => {
 function displayCart() {
   const cart = document.querySelector("#notLoggedIn");
   if (!cart) {
+    const cartLog = document.querySelector("#loggedIn");
+    const cookie = getCookie("cart");
+    if (!cookie) {
+      cartLog.textContent = 0;
+      return;
+    }
+    const cartTemp = JSON.parse(getCookie("cart"));
+    cartLog.textContent = cartTemp.products.length;
     return;
   }
   const cartTemp = JSON.parse(localStorage.getItem("cart"));
   cart.textContent = cartTemp.length;
   return;
 }
+
+function setCookie(cname, cvalue, exdays) {
+  const d = new Date();
+  d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+  let expires = "expires=" + d.toUTCString();
+  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+  let name = cname + "=";
+  let decodedCookie = decodeURIComponent(document.cookie);
+  let ca = decodedCookie.split(";");
+  for (let i = 0; i < ca.length; i++) {
+    let c = ca[i];
+    while (c.charAt(0) == " ") {
+      c = c.substring(1);
+    }
+    if (c.indexOf(name) == 0) {
+      return c.substring(name.length, c.length);
+    }
+  }
+  return "";
+}
+
+console.log(getCookie("cart"));

@@ -12,7 +12,8 @@ module.exports = async (req, res, next) => {
       const jsonData = await response.json();
 
       if (response.status === 200) {
-        res.cookie("cart", jsonData.cart);
+        const cart = JSON.stringify(jsonData.cart)
+        res.cookie("cart", cart);
         return next();
       }
 

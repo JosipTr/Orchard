@@ -71,5 +71,6 @@ exports.postRegister = async (req, res, next) => {
 exports.getLogout = (req, res, next) => {
   res.clearCookie("jwt");
   res.clearCookie("email");
+  res.clearCookie("cart");
   return res.redirect("/");
 };

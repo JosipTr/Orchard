@@ -6,7 +6,7 @@ const session = require("express-session");
 
 const router = require("./routes/index");
 const errorController = require("./controllers/error");
-const middleware = require("./middleware/index");
+const middleware = require("./middleware/auth");
 
 const app = express();
 
@@ -23,7 +23,7 @@ app.use(flash());
 
 
 
-app.use(middleware.authMiddleware);
+app.use(middleware.checkAuthentication);
 
 app.use(router.homeRouter);
 app.use(router.authRouter);
