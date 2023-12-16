@@ -1,5 +1,12 @@
 <%- include('../includes/head.ejs') %>
 <link rel="stylesheet" href="/css/auth.css">
+<script defer>
+const form = document.querySelector("form");
+const input = document.createElement("input");
+input.name = "cart";
+input.value = localStorage.getItem("cart");
+input.type = "hidden";
+</script>
 </head>
 <%- include('../includes/header.ejs') %>
 <section class="login-container">
@@ -12,7 +19,6 @@
 
     <label for="password">Password:</label>
     <input type="password" id="password" name="password" required>
-
     <button class="button-46" type="submit">Login</button>
   </form>
   <p>Don't have an account? <a href="/register">Register here</a>.</p>

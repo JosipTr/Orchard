@@ -2,6 +2,7 @@ const loader = document.createElement("div");
 loader.classList.add("loader");
 
 getProducts = async () => {
+  const cart = document.querySelector("#notLoggedIn");
   const productsContainer = document.querySelector(".products-container");
   productsContainer.appendChild(loader);
   const response = await fetch("http://localhost:8080/products", {
@@ -36,15 +37,29 @@ getProducts = async () => {
 
     productsContainer.appendChild(section);
 
-    addToCart(button, product);
+    addToCart(button, product, cart);
   });
   productsContainer.removeChild(loader);
 };
 
 getProducts();
 
-addToCart = (button, product) => {
-  button.addEventListener("click", (event) => {
+addToCart = (button, product, cart) => {
+  button.addEventListener("click", async (event) => {
+    if (!cart) {
+      const response = await fetch("http://localhost:8080/cart-add",
+      {
+        method: "post",
+        headers: {
+          Authorization : document.cookie.slice(4,180),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(product),
+      }
+      );
+      return;
+    }
+
     if (!localStorage.getItem("cart")) {
       const cart = [
         {
@@ -77,7 +92,10 @@ addToCart = (button, product) => {
 };
 
 function displayCart() {
-  const cart = document.querySelector(".fa");
+  const cart = document.querySelector("#notLoggedIn");
+  if (!cart) {
+    return;
+  }
   const cartTemp = JSON.parse(localStorage.getItem("cart"));
   cart.textContent = cartTemp.length;
   return;
